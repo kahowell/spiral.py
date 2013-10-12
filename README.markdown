@@ -1,7 +1,7 @@
 Spiral
 ======
 spiral.py is a python3 program that prints integer spirals. The spirals are
-counter-clockwise spirals that stop at a given number
+clockwise spirals that stop at a given number
 
 Example:
 
