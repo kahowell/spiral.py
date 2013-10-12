@@ -78,10 +78,10 @@ class SpiralPrinter(object):
         return coords, bounds
 
     def _rotate_direction(self, current_direction):
-        # this is equivalent mathematically to a 90 deg. ccw rotation, so we
-        # can use matrix math: | 0 -1 | |x| = |0*x + -1*y| = |-y|
-        #                      | 1  0 | |y|   |1*x +  0*y|   | x|
-        return DirectionVector(-current_direction.y, current_direction.x)
+        # this is equivalent mathematically to a 90 deg. cw rotation, so we
+        # can use matrix math: | 0  1 | |x| = | 0*x + 1*y| = |y|
+        #                      | -1 0 | |y|   |-1*x + 0*y|   |-x|
+        return DirectionVector(current_direction.y, -current_direction.x)
 
     def _reverse_coords(self, coords):
         reverse_coords = {}
@@ -91,7 +91,8 @@ class SpiralPrinter(object):
 
     def _print_simulated(self, bounds, reverse_coords):
         number_format = '{:>' + str(len(str(self.number))) + '}'
-        for y in range(bounds.min.y, bounds.max.y + 1):
+        # iterate "backwards" to normalize coords to geom. coords
+        for y in range(bounds.max.y, bounds.min.y - 1, -1):
             self._print_row(number_format, bounds, reverse_coords, y)
 
     def _print_row(self, number_format, bounds, reverse_coords, y):
