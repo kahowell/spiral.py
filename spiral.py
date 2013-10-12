@@ -41,6 +41,11 @@ class SpiralPrinter(object):
     def __init__(self, number):
         self.number = number
 
+    ''' Updates the passed bounds object, using the current_location.
+        If the current_location is out of the original bounds (thus
+        invalidating the current bounds), then the method returns True.
+        Otherwise, the method returns False.
+    '''
     @staticmethod
     def update_bounds(bounds, current_location):
         if current_location.x > bounds.max.x:
@@ -58,10 +63,8 @@ class SpiralPrinter(object):
         return False
 
     def print_spiral(self):
-        number_length = len(str(self.number))
-        number_format = '{:>' + str(number_length) + '}'
+        number_format = '{:>' + str(len(str(self.number))) + '}'
         current_location = Location()
-        current_stride = 1
         current_direction_idx = 0
         current_direction = Direction.DIRECTION_ORDER[current_direction_idx]
         bounds = Bounds()
@@ -76,6 +79,10 @@ class SpiralPrinter(object):
         reverse_coords = dict()
         for number, coord in coords.items():
             reverse_coords[coord] = number
+        self._print_simulated(number_format, bounds, reverse_coords)
+
+    @staticmethod
+    def _print_simulated(number_format, bounds, reverse_coords):
         for y in range(bounds.min.y, bounds.max.y + 1):
             for x in range(bounds.min.x, bounds.max.x + 1):
                 number = ''
