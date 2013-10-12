@@ -59,8 +59,8 @@ class SpiralPrinter(object):
 
     def print_spiral(self):
         coords, bounds = self._simulate()
-        reverse_coords = self._reverse_coords(coords)
-        self._print_simulated(bounds, reverse_coords)
+        coords_num_map = self._map_coords_to_nums(coords)
+        self._print_simulated(bounds, coords_num_map)
 
     def _simulate(self):
         # initialize simulation variables
@@ -83,23 +83,23 @@ class SpiralPrinter(object):
         #                      | -1 0 | |y|   |-1*x + 0*y|   |-x|
         return DirectionVector(current_direction.y, -current_direction.x)
 
-    def _reverse_coords(self, coords):
-        reverse_coords = {}
+    def _map_coords_to_nums(self, coords):
+        coords_num_map = {}
         for number, coord in coords.items():
-            reverse_coords[coord] = number
-        return reverse_coords
+            coords_num_map[coord] = number
+        return coords_num_map
 
-    def _print_simulated(self, bounds, reverse_coords):
+    def _print_simulated(self, bounds, coords_num_map):
         number_format = '{:>' + str(len(str(self.number))) + '}'
         # iterate "backwards" to normalize coords to geom. coords
         for y in range(bounds.max.y, bounds.min.y - 1, -1):
-            self._print_row(number_format, bounds, reverse_coords, y)
+            self._print_row(number_format, bounds, coords_num_map, y)
 
-    def _print_row(self, number_format, bounds, reverse_coords, y):
+    def _print_row(self, number_format, bounds, coords_num_map, y):
         for x in range(bounds.min.x, bounds.max.x + 1):
             number = ''
-            if Location(x,y) in reverse_coords:
-                number = reverse_coords[Location(x,y)]
+            if Location(x,y) in coords_num_map:
+                number = coords_num_map[Location(x,y)]
             print(number_format.format(str(number)), end='')
             if x < bounds.max.x:
                 print(end=' ')
