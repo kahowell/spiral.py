@@ -13,6 +13,9 @@ class Location:
     def __add__(self, direction):
         '''Adds this and a compatible object as if they were both 2D vectors.
 
+        Intended to be used to allow a position to be updated by translation
+        by a direction.
+
         '''
         new = Location()
         new.x = self.x + direction.x
