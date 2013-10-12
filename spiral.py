@@ -44,7 +44,7 @@ class SpiralPrinter(object):
         invalidating the current bounds), then the method returns True.
         Otherwise, the method returns False.
     '''
-    def update_bounds(self, bounds, current_location):
+    def _update_bounds(self, bounds, current_location):
         if current_location.x > bounds.max.x:
             bounds.max.x = current_location.x
             return True
@@ -74,7 +74,7 @@ class SpiralPrinter(object):
         # simulate the spiral <number + 1> steps
         for i in range(self.number + 1):
             coords[i] = current_location
-            if (self.update_bounds(bounds, current_location)):
+            if (self._update_bounds(bounds, current_location)):
                 current_direction = self._rotate_direction(current_direction)
             current_location += current_direction
         return coords, bounds
@@ -107,8 +107,10 @@ class SpiralPrinter(object):
                 print(end=' ')
         print('')
 
+
 class BadArgumentsException(Exception):
     pass
+
 
 def main(arguments):
     if len(arguments) != 2:
@@ -116,7 +118,9 @@ def main(arguments):
     try:
         number = int(arguments[1])
     except ValueError:
-        raise BadArgumentsException(' '.join(['Error:', arguments[1], '- not a number']))
+        raise BadArgumentsException('{0} - not a number.'.format(arguments[1]))
+    if number < 0:
+        raise BadArgumentsException('Number should be non-negative.')
     SpiralPrinter(number).print_spiral()
 
 if __name__ == '__main__':
