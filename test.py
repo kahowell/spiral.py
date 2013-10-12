@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+'''Tests for SpiralPrinter and related functions.'''
 import sys
 import unittest
 from io import StringIO
