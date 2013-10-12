@@ -32,6 +32,13 @@ class Location:
 
 
 class Bounds:
+    '''Represents the two corners of the coordinate system that the spiral
+    occupies.
+
+    The minimums are the bottom-left corner, and the maximums are the
+    upper-right corner.
+
+    '''
     def __init__(self):
         self.min = Location()
         self.max = Location()
