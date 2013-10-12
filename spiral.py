@@ -30,12 +30,7 @@ class Bounds:
 DirectionVector = namedtuple('DirectionVector', 'x,y')
 
 class Direction:
-    RIGHT = DirectionVector(1,0)
-    DOWN = DirectionVector(0,1)
-    LEFT = DirectionVector(-1,0)
-    UP = DirectionVector(0,-1)
-
-    DIRECTION_ORDER = [RIGHT, DOWN, LEFT, UP]
+    STARTING = DirectionVector(1,0)
 
 class SpiralPrinter(object):
     def __init__(self, number):
@@ -63,35 +58,51 @@ class SpiralPrinter(object):
         return False
 
     def print_spiral(self):
-        number_format = '{:>' + str(len(str(self.number))) + '}'
+        coords, bounds = self._simulate()
+        reverse_coords = self._reverse_coords(coords)
+        self._print_simulated(bounds, reverse_coords)
+
+    def _simulate(self):
+        # initialize simulation variables
         current_location = Location()
-        current_direction_idx = 0
-        current_direction = Direction.DIRECTION_ORDER[current_direction_idx]
-        bounds = Bounds()
+        current_direction = Direction.STARTING
         coords = dict()
+        bounds = Bounds()
+
+        # simulate the spiral <number + 1> steps
         for i in range(self.number + 1):
             coords[i] = current_location
             if (self.update_bounds(bounds, current_location)):
-                current_direction_idx = (current_direction_idx + 1) % len(Direction.DIRECTION_ORDER)
-                current_direction = Direction.DIRECTION_ORDER[current_direction_idx]
+                current_direction = self._rotate_direction(current_direction)
             current_location += current_direction
-        #process coords
-        reverse_coords = dict()
+        return coords, bounds
+
+    def _rotate_direction(self, current_direction):
+        # this is equivalent mathematically to a 90 deg. ccw rotation, so we
+        # can use matrix math: | 0 -1 | |x| = |0*x + -1*y| = |-y|
+        #                      | 1  0 | |y|   |1*x +  0*y|   | x|
+        return DirectionVector(-current_direction.y, current_direction.x)
+
+    def _reverse_coords(self, coords):
+        reverse_coords = {}
         for number, coord in coords.items():
             reverse_coords[coord] = number
-        self._print_simulated(number_format, bounds, reverse_coords)
+        return reverse_coords
 
-    @staticmethod
-    def _print_simulated(number_format, bounds, reverse_coords):
+    def _print_simulated(self, bounds, reverse_coords):
+        number_format = '{:>' + str(len(str(self.number))) + '}'
         for y in range(bounds.min.y, bounds.max.y + 1):
-            for x in range(bounds.min.x, bounds.max.x + 1):
-                number = ''
-                if Location(x,y) in reverse_coords:
-                    number = reverse_coords[Location(x,y)]
-                print(number_format.format(str(number)), end='')
-                if x < bounds.max.x:
-                    print(end=' ')
-            print('')
+            self._print_row(number_format, bounds, reverse_coords, y)
+
+    def _print_row(self, number_format, bounds, reverse_coords, y):
+        for x in range(bounds.min.x, bounds.max.x + 1):
+            number = ''
+            if Location(x,y) in reverse_coords:
+                number = reverse_coords[Location(x,y)]
+            print(number_format.format(str(number)), end='')
+            if x < bounds.max.x:
+                print(end=' ')
+        print('')
 
 if __name__ == '__main__':
     if len(sys.argv) != 2:
