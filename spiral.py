@@ -41,8 +41,7 @@ class SpiralPrinter(object):
         invalidating the current bounds), then the method returns True.
         Otherwise, the method returns False.
     '''
-    @staticmethod
-    def update_bounds(bounds, current_location):
+    def update_bounds(self, bounds, current_location):
         if current_location.x > bounds.max.x:
             bounds.max.x = current_location.x
             return True
