@@ -20,7 +20,7 @@ Source Layout
 -------------
 - spiral.py - main program
 - test.py - tests for the spiral implementation
-- README - this file
+- README.markdown - this file
 - LICENSE - license for the project
 
 License
