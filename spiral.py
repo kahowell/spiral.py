@@ -22,6 +22,7 @@ class Location:
     def __hash__(self):
         return hash((self.x, self.y))
 
+
 class Bounds:
     def __init__(self):
         self.min = Location()
@@ -29,8 +30,10 @@ class Bounds:
 
 DirectionVector = namedtuple('DirectionVector', 'x,y')
 
+
 class Direction:
-    STARTING = DirectionVector(1,0)
+    STARTING = DirectionVector(1, 0)
+
 
 class SpiralPrinter(object):
     def __init__(self, number):
@@ -97,8 +100,8 @@ class SpiralPrinter(object):
     def _print_row(self, number_format, bounds, coords_num_map, y):
         for x in range(bounds.min.x, bounds.max.x + 1):
             number = ''
-            if Location(x,y) in coords_num_map:
-                number = coords_num_map[Location(x,y)]
+            if Location(x, y) in coords_num_map:
+                number = coords_num_map[Location(x, y)]
             print(number_format.format(str(number)), end='')
             if x < bounds.max.x:
                 print(end=' ')
