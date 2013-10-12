@@ -107,13 +107,21 @@ class SpiralPrinter(object):
                 print(end=' ')
         print('')
 
-if __name__ == '__main__':
-    if len(sys.argv) != 2:
-        print('Usage:', sys.argv[0], '<number>')
-        sys.exit(1)
+class BadArgumentsException(Exception):
+    pass
+
+def main(arguments):
+    if len(arguments) != 2:
+        raise BadArgumentsException('Bad number of arguments.')
     try:
-        number = int(sys.argv[1])
+        number = int(arguments[1])
     except ValueError:
-        print('Error:', sys.argv[1], '- not a number')
-        sys.exit(2)
+        raise BadArgumentsException(' '.join(['Error:', arguments[1], '- not a number']))
     SpiralPrinter(number).print_spiral()
+
+if __name__ == '__main__':
+    try:
+        main(sys.argv)
+    except BadArgumentsException as e:
+        print(str(e))
+        print('Usage:', sys.argv[0], '<number>')
